@@ -98,7 +98,10 @@ logging.info('#vocab = %d' % len(vocab))
 # prepare test data
 logging.info('Loading test data from ' + args.test_set)
 skip = train_args.skip if hasattr(train_args, 'skip') else 1
-train_args.fea_type = ['resnext_st']
+if 'vggish' in train_args.fea_type:
+    train_args.fea_type = ['resnext_st', 'vggish_testset']
+else:
+    train_args.fea_type = ['resnext_st']
 test_data = dh.load(train_args.fea_type, args.test_path, args.test_set,
                     vocab=vocab, 
                     include_caption=train_args.include_caption, separate_caption=train_args.separate_caption,

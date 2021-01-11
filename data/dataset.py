@@ -180,7 +180,7 @@ def collate_fn(data):
     else:
         features = None
         audio_features = None
-
+    
     h_batch = prepare_data(pad_seq(item_info['history'], 1))
     q_batch = prepare_data(pad_seq(item_info['question'], 1))
     a_batch_in = prepare_data(pad_seq(item_info['answer_in'], 1))

@@ -84,7 +84,14 @@ Refer to `configs` folder for more definitions of other parameters which can be 
 While training, the model with the best validation is saved. The model is evaluated by using the losses from response generation as well as question auto-encoding generation. 
 The model output, parameters, vocabulary, and training and validation logs will be save into folder determined in the `expdir` parameter.  
 
-An example of pretrained BiST model using the sampled script in `scripts/run.sh` can be downloaded here (TBD). Unzip the download file and update the `expdir` parameter in the test command in the `scripts/test.sh` to the corresponding unzip directory. Using the pretrained model, the test script provides the following results (TBD)
+Examples of pretrained BiST models using different parameter settings through `scripts/run.sh` can be downloaded below. Unzip the download file and update the `expdir` parameter in the test command in the `scripts/test.sh` to the corresponding unzip directory. Using the pretrained model, the test script provides the following results:
+
+| Model              | Epochs | Link     | Visual  | Audio  | Cap | BLEU1 | BLEU2 | BLEU3 | BLEU4 | METEOR | ROUGE-L | CIDEr |
+|--------------------|--------|----------|---------|--------|-----|-------|-------|-------|-------|--------|---------|-------|
+| visual-only        | 50     | Download | ResNeXt | No     | No  | 0.711 | 0.578 | 0.475 | 0.394 | 0.261  | 0.550   | 1.050 |
+| visual-audio-text  | 50     | Download | ResNeXt | VGGish | Yes | 0.752 | 0.619 | 0.510 | 0.423 | 0.283  | 0.581   | 1.192 |
+| visual-text        | 30     | Download | ResNeXt | No     | Yes | 0.754 | 0.622 | 0.515 | 0.430 | 0.284  | 0.584   | 1.190 |
+| visual-text        | 50     | Download | ResNeXt | No     | Yes | 0.756 | 0.621 | 0.513 | 0.428 | 0.285  | 0.585   | 1.205 |
 
 ## Sample Generated Dialogue Responses
 
