@@ -46,9 +46,11 @@ Our bidirectional approach models the dependencies between text and vision in tw
 
 ## Dataset
 
-We use the AVSD@DSTC7 benchmark. Download the data here (TBD) and unzip into the root directory of the repo.
+We use the AVSD@DSTC7 benchmark. Download the data [here](https://github.com/hudaAlamri/DSTC7-Audio-Visual-Scene-Aware-Dialog-AVSD-Challenge) and unzip into your local directory. 
 
-To use the spatio-temporal features, we extracted the ResNext-101 features from a pretrained model. The features can be downloaded here (TBD). 
+To use the spatio-temporal features, we extracted the visual features from a [published](https://github.com/kenshohara/video-classification-3d-cnn-pytorch) pretrained ResNext-101 model. The extraction code is slightly changed to obtain the features right before average pooling along spatial regions. This extracted visual features for all videos used in the AVSD benchmark can be downloaded here (TBD). 
+
+For audio features, we reused the public features accompanying the AVSD benchmark (Please refer to the benchmark [repo](https://github.com/hudaAlamri/DSTC7-Audio-Visual-Scene-Aware-Dialog-AVSD-Challenge)). 
 
 ## Scripts 
 
