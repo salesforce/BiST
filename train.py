@@ -53,50 +53,42 @@ def run_epoch(data, loader, vocab, epoch, model, loss_compute, eval=False, gen_v
                   
 # get vocabulary
 logging.info('Extracting words from ' + args.train_set)
-if args.ptr_gen and args.cutoff<=0:
-    train_vocab = dh.get_vocabulary(args.train_set, include_caption=args.include_caption, ptr_gen=args.ptr_gen)
-    valid_vocab = dh.get_vocabulary(args.valid_set, include_caption=args.include_caption, ptr_gen=args.ptr_gen)
-    test_vocab = dh.get_vocabulary(args.test_set, include_caption=args.include_caption, ptr_gen=args.ptr_gen)
-    vocab = dh.merge_vocab([train_vocab, valid_vocab, test_vocab])
-else:
-    vocab = dh.get_vocabulary(args.train_set, include_caption=args.include_caption, cutoff=args.cutoff)
-if args.word_emb != 'none':
-    embeddings = dh.get_pretrained_emb(vocab, args.word_emb)
-else:
-    embeddings = None
+vocab = dh.get_vocabulary(args.train_set, include_caption=args.include_caption, cutoff=args.cutoff)
+
 # load data
 logging.info('Loading training data from ' + args.train_set)
 train_data = dh.load(args.fea_type, args.train_path, args.train_set, 
-                     include_caption=args.include_caption, separate_caption=args.separate_caption,
+                     include_caption=args.include_caption, 
+                     separate_caption=args.separate_caption,
                      vocab=vocab, max_history_length=args.max_history_length, 
                      merge_source=args.merge_source, skip=args.skip)
 logging.info('Loading validation data from ' + args.valid_set)
 valid_data = dh.load(args.fea_type, args.valid_path, args.valid_set, 
-                     include_caption=args.include_caption, separate_caption=args.separate_caption, 
+                     include_caption=args.include_caption, 
+                     separate_caption=args.separate_caption, 
                      vocab=vocab, max_history_length=args.max_history_length, 
                      merge_source=args.merge_source, skip=args.skip)
-if args.fea_type[0] == 'none':
-    feature_dims = []
-else:
-    feature_dims = dh.feature_shape(train_data)
+feature_dims = dh.feature_shape(train_data)
 logging.info("Detected feature dims: {}".format(feature_dims));
 logging.info('#vocab = %d' % len(vocab))
 # make batchset for training
 train_dataloader, train_samples = dh.create_dataset(train_data, args.batch_size, True, 
-                                  include_caption=args.include_caption, separate_caption=args.separate_caption,
+                                  include_caption=args.include_caption, 
+                                  separate_caption=args.separate_caption,
                                   cut_a=args.cut_a, num_workers=args.num_workers)
 logging.info('#train sample = %d' % train_samples)
 logging.info('#train batch = %d' % len(train_dataloader))
 # make batchset for validation
 valid_dataloader, valid_samples = dh.create_dataset(valid_data, args.batch_size, False, 
-                                  include_caption=args.include_caption, separate_caption=args.separate_caption,
+                                  include_caption=args.include_caption, 
+                                  separate_caption=args.separate_caption,
                                   cut_a=False, num_workers=args.num_workers)
 
 gen_valid_indices = None
 logging.info('#validation sample = %d' % valid_samples)
 logging.info('#validation batch = %d' % len(valid_dataloader))
 # create_model
-model = make_model(len(vocab), len(vocab), args, ft_sizes=feature_dims, embeddings=embeddings)
+model = make_model(len(vocab), len(vocab), args, ft_sizes=feature_dims)
 model.cuda()
 criterion = LabelSmoothing(size=len(vocab), padding_idx=vocab['<blank>'], smoothing=0.1)
 criterion.cuda()	

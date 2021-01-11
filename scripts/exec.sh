@@ -26,6 +26,7 @@ att_h=8
 nb_blocks=3
 nb_venc_blocks=3
 nb_cenc_blocks=3
+nb_aenc_blocks=0
 d_ff=$(( d_model*4 ))   			# feed-forward hidden layer 
 
 # training setting
@@ -48,7 +49,6 @@ report_interval=100             # step interval to report losses during training
 # generation setting 
 decode_style=beam_search    	# beam search OR greedy 
 penalty=1.0             		# penalty added to the score of each hypothesis
-dec_eos=0
 beam=5
 nbest=5
 model_epoch=best
@@ -159,7 +159,7 @@ if [ $stage -eq 2 ]; then
     for data_set in $test_set; do
         echo start response generation for $data_set
         target=$(basename ${data_set%.*})
-        result=${expdir}/result_${target}_ep${model_epoch}_b${beam}_p${penalty}_n${nbest}_l${maxlen}.json
+        result=${expdir}/result_${target}_ep${model_epoch}_b${beam}_p${penalty}_n${nbest}.json
         test_log=${result%.*}.log
         CUDA_VISIBLE_DEVICES=$device python generate.py \
           --gpu $gpu_id \
@@ -174,23 +174,21 @@ if [ $stage -eq 2 ]; then
           --decode-style ${decode_style} \
           --undisclosed-only ${undisclosed_only} \
           --labeled-test ${labeled_test} \
-          --maxlen ${maxlen} \
-          --dec-eos ${dec_eos} 
           #--num-workers $nb_workers
          #|& tee $test_log
     done
 fi
 
 # scoring only for validation set
-if [ $stage -eq 2 ]; then
+if [ $stage -eq 3 ]; then
     echo --------------------------
-    echo stage 2: score results
+    echo stage 3: score results
     echo --------------------------
     for data_set in $eval_set; do
         echo start evaluation for $data_set
         save_target=$(basename ${test_set%.*})
-        result=${expdir}/result_${save_target}_ep${model_epoch}_b${beam}_p${penalty}_n${nbest}_l${maxlen}.json
+        result=${expdir}/result_${save_target}_ep${model_epoch}_b${beam}_p${penalty}_n${nbest}.json
         cd ./dstc7avsd_eval/
-        ./dstc7avsd_eval.sh ../spatiotemporal_transformer/$result
+        ./dstc7avsd_eval.sh ../$result
     done 
 fi
