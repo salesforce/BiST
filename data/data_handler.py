@@ -19,6 +19,7 @@ from tqdm import tqdm
 from data.dataset import *
 from data.data_utils import *
 
+'''
 def align_vocab(pretrained_vocab, vocab, pretrained_weights):
     for module, module_wt in pretrained_weights.items():
         for layer, layer_wt in module_wt.items():
@@ -45,6 +46,7 @@ def merge_vocab(vocabs):
             if k not in out:
                 out[k] = len(out)
     return out
+'''
 
 def get_vocabulary(dataset_file, cutoff=0, include_caption='none', ptr_gen=0):
     vocab = {'<unk>':0, '<blank>':1, '<sos>':2, '<eos>':3}
@@ -83,6 +85,7 @@ def get_vocabulary(dataset_file, cutoff=0, include_caption='none', ptr_gen=0):
             print("{} words for cutoff {}".format(len(vocab), cutoff))
     return vocab
 
+'''
 def load_emb(emb):
     fname = '/export/share/h-le/data/{}'.format(emb) #glove.6B.200d.txt'
     return load_vec(fname)
@@ -112,8 +115,9 @@ def get_pretrained_emb(vocab, word_emb):
         E[idx,:] = e 
     print("Number of unknown words from pretrained emb {}".format(nb_unk))
     return E 
-        
-# Load text data
+'''
+
+# load text data
 def load(fea_types, fea_path, dataset_file, vocab, include_caption='none', separate_caption=False, max_history_length=-1, merge_source=False, undisclosed_only=False, skip=0):
     dialog_data = json.load(open(dataset_file, 'r'))
     dialog_list = []
