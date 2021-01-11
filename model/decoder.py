@@ -103,8 +103,6 @@ class MultimodalDecoder8(nn.Module):
                     factor += 1
                  
                 self.vc_combine_W = nn.Linear(v_layer.size*factor, factor-1)
-                #else:
-                #    self.vc_combine_W = nn.Linear(v_layer.size*4, 3)
 
     def forward(self, b, ft, x):
         in_ft = {}
@@ -176,9 +174,6 @@ class MultimodalDecoder8(nn.Module):
                 if self.a_N>0:
                     temp = torch.cat([temp, ft['audio_ft']], dim=-1)
                 combine_score = F.softmax((self.vc_combine_W(temp)), dim=-1)
-                #if layer == self.layers[-1]: 
-                #    print('combine score s2t: {}'.format(combine_score.sum(1)[0][0]))
-                #    print('combine score t2s: {}'.format(combine_score.sum(1)[0][1]))
                 if self.args.t2s and self.args.s2t:
                     ft['encoded_ft'] = combine_score[:,:,0].unsqueeze(-1)*ft['temporal_ft'] + \
                         combine_score[:,:,1].unsqueeze(-1)*ft['spatial_ft']               

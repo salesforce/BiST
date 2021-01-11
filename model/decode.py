@@ -42,9 +42,6 @@ def greedy_decode(model, batch, max_len, start_symbol, pad_symbol):
                           Variable(subsequent_mask(ys.size(1)).type_as(query.data)),
                           ae_encoded_ft)
         if type(out) == list or type(out) == tuple:
-            #prob = 0
-            #for idx, o in enumerate(out):
-            #    prob += model.generator[idx](o[:,-1])
             prob = model.generator(out[0][:,-1])
         else:
             prob = model.generator(out[:, -1])
@@ -112,7 +109,6 @@ def ensemble_beam_search_decode(models, batch, max_len, start_symbol, unk_symbol
     encoded = {}
     count = 0
     for key, model in models.items():
-        #his_memory, cap_memory, query_memory, encoded_vid_features, ae_encoded_ft
         vid_fts = [video_features[count]] if video_features[count] is not None else None
         vid_fts_mask = [video_features_mask[count]] if video_features_mask[count] is not None else None 
         encoded[key] = encode(model, his, his_st, his_mask, cap, cap_mask, query, query_mask, vid_fts, vid_fts_mask)

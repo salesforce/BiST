@@ -47,52 +47,17 @@ class MTN(nn.Module):
         return ft 
         
     def encode_vid(self, b, ft):
-        if hasattr(self, 'args') and self.args.vid_enc_mode in [5, 7, 8, 9, 10, 11, 12, 14, 16, 19, 20, 21, 22]:
-            ft = self.vid_encoder(b, ft) 
-        '''
-        else:
-            if self.args.vid_enc_mode in [2, 3, 4, 13, 15, 17, 18]:
-                if self.args.query_mm == 'query':
-                    query = ft['encoded_query']
-                    query_mask = b.query_mask
-                elif self.args.query_mm == 'caption':
-                    query = ft['encoded_cap']
-                    query_mask = b.cap_mask 
-            else:
-                query = ft['encoded_query'].mean(1).unsqueeze(1)
-            ft = self.vid_encoder(b, query, query_mask, ft)
-        '''
+        ft = self.vid_encoder(b, ft) 
         return ft 
     
     def decode(self, b, ft):
-        if hasattr(self, 'args') and \
-            self.args.vid_enc_mode in [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]:
-            ft = self.multimodal_decode_text(b, ft)
-        '''
-        else:
-            ft = self.decode_text(b, ft) 
-            ft = self.multimodal_decode_text(b, ft)
-        '''
+        ft = self.multimodal_decode_text(b, ft)
         return ft
     
-    '''
-    def decode_text(self, b, ft):
+    def multimodal_decode_text(self, b, ft):
         encoded_tgt = self.tgt_embed(b.trg)
         ft['encoded_tgt'] = encoded_tgt
-        ft = self.text_decoder(b, ft, encoded_tgt) 
-        return ft 
-    '''
-
-    def multimodal_decode_text(self, b, ft):
-        if hasattr(self, 'args') and \
-            self.args.vid_enc_mode in [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]:
-            encoded_tgt = self.tgt_embed(b.trg)
-            ft['encoded_tgt'] = encoded_tgt
-            ft = self.mutlimodal_decoder(b, ft, encoded_tgt)
-        '''
-        else:
-            ft = self.mutlimodal_decoder(b, ft) 
-        '''
+        ft = self.mutlimodal_decoder(b, ft, encoded_tgt)
         return ft 
     
 def make_model(src_vocab, tgt_vocab, args, ft_sizes=None, embeddings=None):  
@@ -102,18 +67,9 @@ def make_model(src_vocab, tgt_vocab, args, ft_sizes=None, embeddings=None):
     cenc_N=args.nb_cenc_blocks
     aenc_N=args.nb_aenc_blocks
     d_model=args.d_model
-    #d_ff=args.d_ff
     d_ff = d_model * 4
     h=args.att_h
     dropout=args.dropout
-    #separate_his_embed=args.separate_his_embed
-    #separate_cap_embed=args.separate_cap_embed 
-    #separate_out_embed=args.separate_out_embed
-    #separate_out_linear=args.separate_out_linear
-    #diff_encoder=args.diff_encoder
-    #diff_embed=args.diff_embed
-    #diff_gen=args.diff_gen
-    #auto_encoder_ft=args.auto_encoder_ft
     ptr_gen=args.ptr_gen
     ptr_ft=args.ptr_ft
     
@@ -123,12 +79,7 @@ def make_model(src_vocab, tgt_vocab, args, ft_sizes=None, embeddings=None):
     position = PositionalEncoding(d_model, dropout)
     query_embed = [Embeddings(d_model, src_vocab), c(position)]
     query_embed = nn.Sequential(*query_embed)
-    
-    #if not separate_out_embed:
     tgt_embed = query_embed
-    #else:
-    #    tgt_embed = [Embeddings(d_model, tgt_vocab), c(position)]
-    #    tgt_embed = nn.Sequential(*tgt_embed)  
         
     if ptr_gen:
         if len(ptr_ft.split(','))>1:
@@ -151,20 +102,9 @@ def make_model(src_vocab, tgt_vocab, args, ft_sizes=None, embeddings=None):
     else:
         ae_generator = None
     
-    #if separate_his_embed:
-    #    his_embed = nn.Sequential(Embeddings(d_model, src_vocab), c(position))
-    #else:
     his_embed = None 
-        
-    #if separate_cap_embed:
-    #    cap_embed = nn.Sequential(Embeddings(d_model, src_vocab), c(position))
-    #else:
     cap_embed = None 
-        
     text_encoder=Encoder(d_model, nb_layers=3)
-    #if args.vid_pos:
-    #    vid_position = c(position)
-    #else:
     vid_position = None
     
     if len(ft_sizes)>0:
@@ -224,20 +164,4 @@ def make_model(src_vocab, tgt_vocab, args, ft_sizes=None, embeddings=None):
         if p.dim() > 1:
             nn.init.xavier_uniform(p)
 
-    '''
-    if embeddings is not None: 
-        if args.fixed_word_emb:
-            query_embed[0].lut = query_embed[0].lut.from_pretrained(torch.tensor(embeddings).float(), freeze=True)
-        else:
-            query_embed[0].lut = query_embed[0].lut.from_pretrained(torch.tensor(embeddings).float(), freeze=False)
-        if embeddings.shape[1] != d_model:
-            new_embed = [query_embed[0], nn.Linear(embeddings.shape[1], d_model), c(position)]
-        else:
-            new_embed = [query_embed[0], c(position)]
-        query_embed = nn.Sequential(*new_embed)
-        tgt_embed = query_embed
-        model.query_embed = query_embed
-        model.tgt_embed = tgt_embed
-    '''
-    
     return model

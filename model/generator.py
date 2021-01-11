@@ -18,7 +18,6 @@ class Generator(nn.Module):
             self.proj = nn.Linear(d_model, vocab)
             self.shared_W = False
         
-    #def forward(self, x):
     def forward(self, ft, batch, args, ft_key='decoded_text'):
         x = ft[ft_key]
         if hasattr(self, 'shared_W') and self.shared_W:
@@ -34,9 +33,7 @@ class PointerGenerator(nn.Module):
         self.pointer_gen_W = nn.Linear(d_model*3, 1) 
         self.pointer_attn = pointer_attn 
 
-    #def forward(self, logits, ft, batch, args):
     def forward(self, ft, batch, args):
-        #vocab_attn =  logits.matmul(self.vocab_gen.transpose(1,0))
         logits = ft['decoded_text']
         vocab_attn =  logits.matmul(self.vocab_gen.transpose(1,0))
         p_vocab = F.softmax(vocab_attn, dim = -1)
@@ -64,7 +61,6 @@ class PointerGenerator(nn.Module):
         
         self.pointer_attn(logits, encoded_text, encoded_text, text_mask)
         pointer_attn = self.pointer_attn.attn.squeeze(1)
-        #p_vocab = F.softmax(vocab_attn, dim = -1)
         
         text_index = text.unsqueeze(1).expand_as(pointer_attn)
         p_text_ptr = torch.zeros(p_vocab.size()).cuda()

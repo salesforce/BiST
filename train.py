@@ -129,11 +129,6 @@ print("Saving val results to {}".format(trace_log_path))
 model_opt = NoamOpt(args.d_model, 1, args.warmup_steps,
         torch.optim.Adam(model.parameters(), lr=0, betas=(0.9, 0.98), eps=1e-9))
 
-#if torch.cuda.device_count() > 1:
-#    train_loss = MultiGPULossCompute(model.generator, model.ae_generator, 
-#                                     criterion, opt=model_opt, l=args.loss_l, args=args,
-#                                    devices=devices)
-#else:
 train_loss = SimpleLossCompute(model.generator, model.ae_generator,
           criterion, opt=model_opt, args=args)
 val_loss = SimpleLossCompute(model.generator, model.ae_generator,

@@ -24,8 +24,6 @@ class LabelSmoothing(nn.Module):
         true_dist.scatter_(1, target.data.unsqueeze(1), self.confidence)
         true_dist[:, self.padding_idx] = 0
         mask = torch.nonzero(target.data == self.padding_idx)
-        #pdb.set_trace()
-        #if mask.dim() > 0:
         if mask.sum()>0 and len(mask)>0: 
             true_dist.index_fill_(0, mask.squeeze(), 0.0)
         self.true_dist = true_dist
