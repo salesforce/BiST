@@ -2,7 +2,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 
 This is the PyTorch implementation of the paper:
-**[BiST: Bi-directional Spatio-Temporal Reasoning for Video-Grounded Dialogues](<https://www.aclweb.org/anthology/2020.emnlp-main.145/>)**. [**Hung Le**](https://github.com/henryhungle), []Doyen Sahoo](https://scholar.google.com.sg/citations?user=A61jJD4AAAAJ&hl=en), [Nancy F. Chen](https://sites.google.com/site/nancyfchen/home), [Steven C.H. Hoi](https://sites.google.com/view/stevenhoi/). ***[EMNLP 2020](<https://www.aclweb.org/anthology/2020.emnlp-main.145/>)***. ([arXiv](https://arxiv.org/abs/2010.10095)) 
+**[BiST: Bi-directional Spatio-Temporal Reasoning for Video-Grounded Dialogues](<https://www.aclweb.org/anthology/2020.emnlp-main.145/>)**. [**Hung Le**](https://github.com/henryhungle), [Doyen Sahoo](https://scholar.google.com.sg/citations?user=A61jJD4AAAAJ&hl=en), [Nancy F. Chen](https://sites.google.com/site/nancyfchen/home), [Steven C.H. Hoi](https://sites.google.com/view/stevenhoi/). ***[EMNLP 2020](<https://www.aclweb.org/anthology/2020.emnlp-main.145/>)***. ([arXiv](https://arxiv.org/abs/2010.10095)) 
 
 
 This code has been written using PyTorch 1.0.1. If you find the paper or the source code useful to your projects, please cite the following bibtex: 
@@ -52,7 +52,7 @@ To use the spatio-temporal features, we extracted the ResNext-101 features from 
 
 ## Scripts 
 
-We created `scripts/exe.sh` to prepare evaluation code, train models, generate dialogue response, and evaluating the generated responses with automatic metrics. You can directly run this file which includes example parameter setting: 
+We created `scripts/exec.sh` to prepare evaluation code, train models, generate dialogue response, and evaluating the generated responses with automatic metrics. You can directly run this file which includes example parameter setting: 
 
 | Parameter           | Description                                                  | Values                                                       |
 | :------------------ | :----------------------------------------------------------- | ------------------------------------------------------------ |
@@ -63,7 +63,7 @@ We created `scripts/exe.sh` to prepare evaluation code, train models, generate d
 | **s2t** | set 1 to use spatial-to-temporal attention operation                                | 0, 1                                                      |
 | **nb_workers**      | number of worker to preprocess data and create batches                                    | e.g. 4  |
 
-An example to run `scripts/exe.sh` is shown in  `scripts/run.sh`.
+An example to run `scripts/exec.sh` is shown in  `scripts/run.sh`.
 
 Other model parameters can be also be set, either manually or changed as dynamic input, including but not limited to:
 
@@ -77,14 +77,14 @@ Other model parameters can be also be set, either manually or changed as dynamic
 | **nb_cenc_blocks**      | number of caption reasoning attention layers                                    | e.g. 3  |
 | **nb_aenc_blocks**      | number of audio reasoning attention layers                                    | e.g. 3  |
 
-Refer to `configs` folder for more definitions of other parameters which can be set through  `scripts/exe.sh`. 
+Refer to `configs` folder for more definitions of other parameters which can be set through  `scripts/exec.sh`. 
 
 While training, the model with the best validation is saved. The model is evaluated by using the losses from response generation as well as question auto-encoding generation. 
 The model output, parameters, vocabulary, and training and validation logs will be save into folder determined in the `expdir` parameter.  
 
 An example of pretrained BiST model using the sampled script in `scripts/run.sh` can be downloaded here (TBD). Unzip the download file and update the `expdir` parameter in the test command in the `scripts/test.sh` to the corresponding unzip directory. Using the pretrained model, the test script provides the following results (TBD)
 
-## Sample Generated Dialogue Response
+## Sample Generated Dialogue Responses
 
 <p align="center">
 <img src="img/sample_outputs.png" width="100%" />
