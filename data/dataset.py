@@ -80,10 +80,6 @@ class Batch:
             else:
                 self.fts = self.to_cuda(torch.from_numpy(fts[0]).float())
                 self.fts_mask = self.to_cuda((self.fts.sum(-1)!=0).unsqueeze(-2))
-                #self.temporal_ft = self.to_cuda(torch.from_numpy(fts[0]).float())
-                #self.spatial_ft = self.to_cuda(torch.from_numpy(fts[1]).float())
-                #self.spatial_mask = self.to_cuda((self.spatial_ft.sum(-1) != 0).unsqueeze(-2))
-                #self.temporal_mask = self.to_cuda((self.temporal_ft.sum(-1) != 0).unsqueeze(-2))
         self.audio_fts = None
         self.audio_mask = None 
         if audio_fts is not None and len(audio_fts)!=0:
@@ -153,7 +149,6 @@ def collate_fn(data):
             return feature
         else:
             return feature.reshape((feature.shape[0], -1, feature.shape[-1]))
-            #return np.transpose(feature.reshape(feature.shape[0], feature.shape[1], -1), (0,2,1))
 
     item_info = {}
     for key in data[0].keys():
@@ -166,7 +161,6 @@ def collate_fn(data):
             if item_info['features'][0][f_idx] is None:
                 features.append(None)
             else:
-                #fea_ls = [fi[f_idx][-1] for fi in item_info['features']]
                 fea_ls = [load_np(fi[f_idx][0]) for fi in item_info['features']]
                 x_len = max([i.shape[0] for i in fea_ls]) 
                 n_seqs = len(fea_ls)
@@ -176,8 +170,6 @@ def collate_fn(data):
                                         fea_ls[0].shape[2]),dtype=np.float32)        
                 else:
                     x_batch = np.zeros((n_seqs, x_len, fea_ls[0].shape[-1]),dtype=np.float32)
-                #x_batch = np.zeros((n_seqs, x_len, fea_ls[0].shape[-3], \
-                #                    fea_ls[0].shape[-2], fea_ls[0].shape[-1]),dtype=np.float32)
                 for j, fea in enumerate(fea_ls):
                     x_batch[j, :len(fea)] = fea
                 if 'vggish' in item_info['features'][0][f_idx][0]:

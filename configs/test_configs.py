@@ -16,7 +16,8 @@ parser.add_argument('--model', '-m', default='', type=str,
                     help='Attention model to be output')
 parser.add_argument('--maxlen', default=12, type=int,
                     help='Max-length of output sequence')
-parser.add_argument('--dec-eos', default=0, type=int, help='')
+parser.add_argument('--dec-eos', default=0, type=int, 
+                    help='if zero, include eos token as skip token during decoding')
 parser.add_argument('--beam', default=3, type=int,
                     help='Beam width')
 parser.add_argument('--penalty', default=2.0, type=float,
@@ -28,9 +29,9 @@ parser.add_argument('--output', '-o', default='', type=str,
 parser.add_argument('--verbose', '-v', default=0, type=int,
                     help='verbose level')
 parser.add_argument('--decode-style', default='greedy', type=str, help='greedy or beam_search')
-parser.add_argument('--undisclosed-only', default=0, type=int, help='')
+parser.add_argument('--undisclosed-only', default=0, type=int, help='decode undisclosed dialogue turn in test set only')
 parser.add_argument('--labeled-test', default=None, type=str, help='directory to labelled data')
-parser.add_argument('--num-workers', default=0, type=int, help='')
+parser.add_argument('--num-workers', default=0, type=int, help='data workers')
 
 
 args = parser.parse_args()

@@ -19,35 +19,6 @@ from tqdm import tqdm
 from data.dataset import *
 from data.data_utils import *
 
-'''
-def align_vocab(pretrained_vocab, vocab, pretrained_weights):
-    for module, module_wt in pretrained_weights.items():
-        for layer, layer_wt in module_wt.items():
-            if 'embed' in layer:
-                print("Aligning word emb for layer {} in module {}...".format(layer, module))
-                print("Pretrained emb of shape {}".format(layer_wt.shape))
-                emb_dim = layer_wt.shape[1]
-                embs = np.zeros((len(vocab), emb_dim), dtype=np.float32)
-                count = 0 
-                for k,v in vocab.items():
-                    if k in pretrained_vocab:
-                        embs[v] = layer_wt[pretrained_vocab[k]]
-                    else:
-                        count += 1 
-                pretrained_weights[module][layer] = embs
-                print("Aligned emb of shape {}".format(embs.shape))
-                print("Number of unmatched words {}".format(count))
-    return pretrained_weights
-
-def merge_vocab(vocabs):
-    out = {'<unk>':0, '<blank>':1, '<sos>':2, '<eos>':3}
-    for vocab in vocabs:
-        for k,v in vocab.items():
-            if k not in out:
-                out[k] = len(out)
-    return out
-'''
-
 def get_vocabulary(dataset_file, cutoff=0, include_caption='none', ptr_gen=0):
     vocab = {'<unk>':0, '<blank>':1, '<sos>':2, '<eos>':3}
     dialog_data = json.load(open(dataset_file, 'r'))
@@ -84,38 +55,6 @@ def get_vocabulary(dataset_file, cutoff=0, include_caption='none', ptr_gen=0):
                     vocab[word] = len(vocab) 
             print("{} words for cutoff {}".format(len(vocab), cutoff))
     return vocab
-
-'''
-def load_emb(emb):
-    fname = '/export/share/h-le/data/{}'.format(emb) #glove.6B.200d.txt'
-    return load_vec(fname)
-
-def load_vec(fname):
-    fin = io.open(fname, 'r', encoding='utf-8', newline='\n', errors='ignore')
-    data = {}
-    emb_dim = -1
-    for line in tqdm(fin):
-        tokens = line.rstrip().split(' ')
-        if len(tokens)==2: continue 
-        data[tokens[0]] = list(map(float, tokens[1:]))
-        if emb_dim < 0: emb_dim = len(data[tokens[0]])
-    return data, emb_dim        
-
-def get_pretrained_emb(vocab, word_emb):
-    print("Dumping pretrained embeddings...")
-    emb, emb_dim = load_emb(word_emb)        
-    E = np.zeros((len(vocab), emb_dim))
-    nb_unk = 0
-    for w, idx in vocab.items():
-        if w in emb:
-            e = np.asarray(emb[w])
-        else:
-            nb_unk += 1
-            e = np.asarray([random.uniform(-0.1, 0.1) for i in range(emb_dim)])
-        E[idx,:] = e 
-    print("Number of unknown words from pretrained emb {}".format(nb_unk))
-    return E 
-'''
 
 # load text data
 def load(fea_types, fea_path, dataset_file, vocab, include_caption='none', separate_caption=False, max_history_length=-1, merge_source=False, undisclosed_only=False, skip=0):
@@ -179,16 +118,12 @@ def load(fea_types, fea_path, dataset_file, vocab, include_caption='none', separ
                 if 'rgb' in ftype:
                     feature = np.load(filepath, allow_pickle=True)[::skip]
                     shape = feature.shape
-                elif 'st' in ftype:
-                    #feature = np.load(filepath, allow_pickle=True)
-                    #feature = np.transpose(feature.reshape(feature.shape[0], feature.shape[1], -1), (0,2,1))
+                elif 'st' in ftype: # spatio-temporal feature
                     feature = None 
                     shape=[1]
                 else:
                     feature = None
                     shape=[1]
-                    #feature = np.load(filepath, allow_pickle=True)
-                    #shape = feature.shape
                 features[vid] = (filepath, shape[0], feature)
             data['features'].append(features)
     else:

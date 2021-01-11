@@ -5,10 +5,11 @@
 #input choices
 device=$1
 stage=$2       	# <=1: preparation <=2: training <=3: generating <=4: evaluating 
-test_mode=$3    # true: test run with small datasets OR false: run with real datasets 
-t2s=$4
-s2t=$5
-nb_workers=$6
+test_mode=false    # true: test run with small datasets OR false: run with real datasets 
+expdir=$3
+#t2s=$4
+#s2t=$5
+#nb_workers=$6
 
 # data setting 
 decode_data=off                 	#use official data for testing 
@@ -35,15 +36,15 @@ warmup_steps=13000      			# e.g. 9660
 dropout=0.2             			# e.g. 0.1
 batch_size=32
 seed=1                      		# random seed 
-model_prefix=mtn                   # model name 
+model_prefix=mtn                  # model name 
 expid=t2s${t2s}_s2t${s2t}
 
 # output folder
-if [ $test_mode = true ]; then 
-    expdir=exps_test/${expid}
-else
-    expdir=exps/${expid}                                          
-fi
+#if [ $test_mode = true ]; then 
+#    expdir=exps_test/${expid}
+#else
+#    expdir=exps/${expid}                                          
+#fi
 report_interval=100             # step interval to report losses during training
 
 # generation setting 
@@ -91,8 +92,8 @@ enc_hsize_=`echo $enc_hsize|sed "s/ /-/g"`
 fea_type_=`echo $fea_type|sed "s/ /-/g"`
 
 # command settings
-#train_cmd=""
-#test_cmd=""
+train_cmd=""
+test_cmd=""
 #gpu_id=`utils/get_available_gpu_id.sh`
 
 set -e

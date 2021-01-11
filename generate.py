@@ -69,6 +69,7 @@ def generate_response(model, data, loader, vocab, maxlen, beam=5, penalty=2.0, n
                     logging.info('HYP[%d]: %s  ( %f )' % (n + 1, hypstr, pred[1]))
                     if n == 0: 
                         pred_dialog['dialog'][t]['answer'] = hypstr
+                  #pdb.set_trace()
                 elif args.decode_style == 'greedy': 
                   output = greedy_decode(model, batch, maxlen, start_symbol=vocab['<sos>'], pad_symbol=vocab['<blank>'])
                   output = [i for i in output[0].cpu().numpy()]

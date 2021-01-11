@@ -135,9 +135,9 @@ model_opt = NoamOpt(args.d_model, 1, args.warmup_steps,
 #                                    devices=devices)
 #else:
 train_loss = SimpleLossCompute(model.generator, model.ae_generator,
-          criterion, opt=model_opt, l=args.loss_l, args=args)
+          criterion, opt=model_opt, args=args)
 val_loss = SimpleLossCompute(model.generator, model.ae_generator,
-            criterion,opt=None, l=args.loss_l, args=args)
+            criterion,opt=None, args=args)
 
 for epoch in range(args.num_epochs):
     # start training 
