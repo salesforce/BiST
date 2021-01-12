@@ -46,11 +46,11 @@ Our bidirectional approach models the dependencies between text and vision in tw
 
 ## Dataset
 
-We use the AVSD@DSTC7 benchmark. Download the data [here](https://github.com/hudaAlamri/DSTC7-Audio-Visual-Scene-Aware-Dialog-AVSD-Challenge) and unzip into your local directory. 
+We use the AVSD@DSTC7 benchmark. Refer to the official benchmark repo [here](https://github.com/hudaAlamri/DSTC7-Audio-Visual-Scene-Aware-Dialog-AVSD-Challenge) to download the dataset. Alternatively, you can refer [here](https://drive.google.com/drive/folders/12_w-NKp1v_IcJcH6B0MLm7APBrtsVv67?usp=sharing) for download links of dialogue-only data. 
 
 To use the spatio-temporal features, we extracted the visual features from a [published](https://github.com/kenshohara/video-classification-3d-cnn-pytorch) pretrained ResNext-101 model. The extraction code is slightly changed to obtain the features right before average pooling along spatial regions. This extracted visual features for all videos used in the AVSD benchmark can be downloaded here (TBD). 
 
-Alternatively, you can download Charades videos ([train+validation](https://prior.allenai.org/projects/charades) and [test](http://vuchallenge.org/charades.html) videos, scaled to 480p) to extract features by yourself. Please refer to  our modified code for feature extraction under the `video-classification-3d-cnn-pytorch` folder. An example running script is in the `run.sh` file in this folder. Videos are extracted by batches, specified by start and index of video files.  
+Alternatively, you can download Charades videos ([train+validation](https://prior.allenai.org/projects/charades) and [test](http://vuchallenge.org/charades.html) videos, scaled to 480p) to extract features by yourself. Please refer to  our modified code for feature extraction under the `video-classification-3d-cnn-pytorch` folder. An example running script is in the `run.sh` file in this folder. Videos are extracted by batches, specified by start and end index of video files.  
 
 For audio features, we reused the public features accompanying the AVSD benchmark (Please refer to the benchmark [repo](https://github.com/hudaAlamri/DSTC7-Audio-Visual-Scene-Aware-Dialog-AVSD-Challenge)). 
 
@@ -67,7 +67,7 @@ We created `scripts/exec.sh` to prepare evaluation code, train models, generate 
 | **s2t** | set 1 to use spatial-to-temporal attention operation                                | 0, 1                                                      |
 | **nb_workers**      | number of worker to preprocess data and create batches                                    | e.g. 4  |
 
-An example to run `scripts/exec.sh` is shown in  `scripts/run.sh`.
+An example to run `scripts/exec.sh` is shown in  `scripts/run.sh`. Please update the `data_root` in `scripts/exec.sh` to your local directory of the dialogue data/video features before running. 
 
 Other model parameters can be also be set, either manually or changed as dynamic input, including but not limited to:
 
@@ -87,11 +87,11 @@ While training, the model with the best validation is saved. The model is evalua
 The model output, parameters, vocabulary, and training and validation logs will be save into folder determined in the `expdir` parameter.  
 
 Examples of pretrained BiST models using different parameter settings through `scripts/run.sh` can be downloaded [here](https://drive.google.com/drive/folders/1Rs8QuQF2Ikmbe4ENOuxLk1_Kk0cQntf4?usp=sharing). Unzip the download file and update the `expdir` parameter in the test command in the `scripts/test.sh` to the corresponding unzip directory. Using the pretrained model, the test script provides the following results:
-| Model              | Epochs | Link     | Visual  | Audio  | Cap | BLEU1 | BLEU2 | BLEU3 | BLEU4 | METEOR | ROUGE-L | CIDEr |
+| Model              | Epochs | Link     | Visual  | Audio  | Caption | BLEU1 | BLEU2 | BLEU3 | BLEU4 | METEOR | ROUGE-L | CIDEr |
 |--------------------|--------|----------|---------|--------|-----|-------|-------|-------|-------|--------|---------|-------|
-| visual-audio-text  | 50     | [Download](https://drive.google.com/drive/folders/1xc1MbdHkDDX_G7qbn4m8DKEuopRDg5XF?usp=sharing) | ResNeXt | VGGish | Yes | 0.752 | 0.619 | 0.510 | 0.423 | 0.283  | 0.581   | 1.193 |
-| visual-text        | 30     | [Download](https://drive.google.com/drive/folders/1gkX-JK02TRsRkP7slz4eiq1Dp2UiKnqT?usp=sharing) | ResNeXt | No     | Yes | 0.755 | 0.623 | 0.517 | 0.432 | 0.284  | 0.585   | 1.194 |
-| visual-text        | 50     | [Download](https://drive.google.com/drive/folders/1xc1MbdHkDDX_G7qbn4m8DKEuopRDg5XF?usp=sharing) | ResNeXt | No     | Yes | 0.755 | 0.620 | 0.512 | 0.426 | 0.285  | 0.585   | 1.201 |
+| visual-audio-text  | 50     | [Download](https://drive.google.com/drive/folders/1xc1MbdHkDDX_G7qbn4m8DKEuopRDg5XF?usp=sharing) | ResNeXt | VGGish | Summary | 0.752 | 0.619 | 0.510 | 0.423 | 0.283  | 0.581   | 1.193 |
+| visual-text        | 30     | [Download](https://drive.google.com/drive/folders/1gkX-JK02TRsRkP7slz4eiq1Dp2UiKnqT?usp=sharing) | ResNeXt | No     | Summary | 0.755 | 0.623 | 0.517 | 0.432 | 0.284  | 0.585   | 1.194 |
+| visual-text        | 50     | [Download](https://drive.google.com/drive/folders/1xc1MbdHkDDX_G7qbn4m8DKEuopRDg5XF?usp=sharing) | ResNeXt | No     | Summary | 0.755 | 0.620 | 0.512 | 0.426 | 0.285  | 0.585   | 1.201 |
 
 
 ## Sample Generated Dialogue Responses
