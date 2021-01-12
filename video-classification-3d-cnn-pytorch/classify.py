@@ -26,41 +26,18 @@ def classify_video(video_dir, video_name, class_names, model, opt):
     video_segments = []
     for i, (inputs, segments) in enumerate(data_loader):
         with torch.no_grad():
-            inputs = Variable(inputs) #, volatile=True)
+            inputs = Variable(inputs) 
         outputs = model(inputs)
         
         st_outputs.append(outputs['spatio-temporal'].cpu().data)
-        #t_outputs.append(outputs['temporal'].cpu().data)
         video_segments.append(segments)
 
     st_outputs = torch.cat(st_outputs)
-    #t_outputs = torch.cat(t_outputs)
     video_segments = torch.cat(video_segments)
     
     results = {
         'video': video_name,
         'st_feature': st_outputs.numpy(),
-        #'t_feature': t_outputs.numpy()
     }
     
-    '''
-    results = {
-        'video': video_name,
-        'clips': []
-    }
-
-    _, max_indices = video_outputs.max(dim=1)
-    for i in range(video_outputs.size(0)):
-        clip_results = {
-            'segment': video_segments[i].tolist(),
-        }
-
-        if opt.mode == 'score':
-            clip_results['label'] = class_names[max_indices[i]]
-            clip_results['scores'] = video_outputs[i].tolist()
-        elif opt.mode == 'feature':
-            clip_results['features'] = video_outputs[i].tolist()
-
-        results['clips'].append(clip_results)
-    '''
     return results
