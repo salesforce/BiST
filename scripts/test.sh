@@ -4,12 +4,10 @@
 
 #input choices
 device=$1
-stage=$2       	# <=1: preparation <=2: training <=3: generating <=4: evaluating 
-test_mode=false    # true: test run with small datasets OR false: run with real datasets 
-expdir=$3
-#t2s=$4
-#s2t=$5
-#nb_workers=$6
+expdir=$2
+
+stage=2
+test_mode=false
 
 # data setting 
 decode_data=off                 	#use official data for testing 
@@ -22,30 +20,7 @@ fea_names=resnext
 include_caption=summary
 
 # model setting 
-d_model=128
-att_h=8
-nb_blocks=3
-nb_venc_blocks=3
-nb_cenc_blocks=3
-nb_aenc_blocks=0
-d_ff=$(( d_model*4 ))   			# feed-forward hidden layer 
-
-# training setting
-num_epochs=50           			# e.g. 15
-warmup_steps=13000      			# e.g. 9660
-dropout=0.2             			# e.g. 0.1
-batch_size=32
-seed=1                      		# random seed 
 model_prefix=mtn                  # model name 
-expid=t2s${t2s}_s2t${s2t}
-
-# output folder
-#if [ $test_mode = true ]; then 
-#    expdir=exps_test/${expid}
-#else
-#    expdir=exps/${expid}                                          
-#fi
-report_interval=100             # step interval to report losses during training
 
 # generation setting 
 decode_style=beam_search    	# beam search OR greedy 
@@ -59,8 +34,6 @@ echo Stage $stage Test Mode $test_mode Exp ID $expid
 workdir=`pwd`
 labeled_test=''
 if [ $test_mode = true ]; then 
-  train_set=$data_root/train_test.json
-  valid_set=$data_root/valid_test.json
   test_set=$data_root/test_test.json
   labeled_test=$data_root/test_test.json
   eval_set=${labeled_test}
@@ -69,8 +42,6 @@ if [ $test_mode = true ]; then
   num_epochs=1
   expdir=${expdir}
 else
-  train_set=$data_root/train_set4DSTC7-AVSD.json
-  valid_set=$data_root/valid_set4DSTC7-AVSD.json
   test_set=$data_root/test_set.json
   labeled_test=$data_root/test_set.json
   if [ $decode_data = 'off' ]; then
@@ -92,58 +63,9 @@ enc_hsize_=`echo $enc_hsize|sed "s/ /-/g"`
 fea_type_=`echo $fea_type|sed "s/ /-/g"`
 
 # command settings
-train_cmd=""
-test_cmd=""
-#gpu_id=`utils/get_available_gpu_id.sh`
-
 set -e
 set -u
 set -o pipefail
-
-# preparation
-#echo -------------------------
-#echo stage 0: preparation 
-#echo -------------------------
-#echo setup ms-coco evaluation tool
-#if [ ! -d utils/coco-caption ]; then
-#    git clone https://github.com/tylin/coco-caption utils/coco-caption
-#    patch -p0 -u < utils/coco-caption.patch
-#else
-#    echo Already exists COCO package.
-#fi
-
-# training phase
-mkdir -p $expdir
-if [ $stage -eq 1 ]; then
-    echo -------------------------
-    echo stage 1: model training
-    echo -------------------------
-    CUDA_VISIBLE_DEVICES=$device python train.py \
-      --fea-type $fea_type \
-      --train-path "$fea_dir/$fea_file" \
-      --train-set $train_set \
-      --valid-path "$fea_dir/$fea_file" \
-      --valid-set $valid_set \
-      --test-set $test_set \
-      --num-epochs $num_epochs \
-      --batch-size $batch_size \
-      --model $expdir/$model_prefix \
-      --rand-seed $seed \
-      --report-interval $report_interval \
-      --nb-blocks $nb_blocks \
-      --include-caption $include_caption \
-      --warmup-steps $warmup_steps \
-      --nb-blocks $nb_blocks \
-      --d-model $d_model \
-      --d-ff $d_ff \
-      --att-h $att_h \
-      --dropout $dropout \
-      --nb-venc-blocks $nb_venc_blocks \
-      --nb-cenc-blocks $nb_cenc_blocks \
-      --t2s $t2s --s2t $s2t \
-      --num-workers $nb_workers \
-      --device $device
-fi
 
 # testing phase
 if [ $stage -eq 2 ]; then
@@ -179,9 +101,9 @@ if [ $stage -eq 2 ]; then
 fi
 
 # scoring only for validation set
-if [ $stage -eq 3 ]; then
+if [ $stage -eq 2 ]; then
     echo --------------------------
-    echo stage 3: score results
+    echo stage 2: score results
     echo --------------------------
     for data_set in $eval_set; do
         echo start evaluation for $data_set

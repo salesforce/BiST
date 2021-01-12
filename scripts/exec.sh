@@ -6,8 +6,6 @@
 device=$1
 stage=$2       	# <=1: preparation <=2: training <=3: generating <=4: evaluating 
 test_mode=$3    # true: test run with small datasets OR false: run with real datasets 
-t2s=$4
-s2t=$5
 nb_workers=$6
 
 # data setting 
@@ -21,6 +19,8 @@ fea_names=resnext
 include_caption=summary
 
 # model setting 
+t2s=1
+s2t=1
 d_model=128
 att_h=8
 nb_blocks=3
@@ -36,7 +36,7 @@ dropout=0.2             			# e.g. 0.1
 batch_size=32
 seed=1                      		# random seed 
 model_prefix=mtn                   # model name 
-expid=t2s${t2s}_s2t${s2t}
+expid=${fea_names}_${include_caption}
 
 # output folder
 if [ $test_mode = true ]; then 
@@ -90,26 +90,9 @@ enc_psize_=`echo $enc_psize|sed "s/ /-/g"`
 enc_hsize_=`echo $enc_hsize|sed "s/ /-/g"`
 fea_type_=`echo $fea_type|sed "s/ /-/g"`
 
-# command settings
-#train_cmd=""
-#test_cmd=""
-#gpu_id=`utils/get_available_gpu_id.sh`
-
 set -e
 set -u
 set -o pipefail
-
-# preparation
-#echo -------------------------
-#echo stage 0: preparation 
-#echo -------------------------
-#echo setup ms-coco evaluation tool
-#if [ ! -d utils/coco-caption ]; then
-#    git clone https://github.com/tylin/coco-caption utils/coco-caption
-#    patch -p0 -u < utils/coco-caption.patch
-#else
-#    echo Already exists COCO package.
-#fi
 
 # training phase
 mkdir -p $expdir

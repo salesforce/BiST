@@ -1,6 +1,6 @@
-device=$1
-stage=$2
-is_test=true
+device=1
+stage=1
+is_test=false
 num_workers=4
 
-./scripts/exec.sh $device $stage $is_test 1 1 $num_workers 
+./scripts/exec.sh $device $stage $is_test $num_workers 

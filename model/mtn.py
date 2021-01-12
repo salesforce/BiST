@@ -116,7 +116,7 @@ def make_model(src_vocab, tgt_vocab, args, ft_sizes=None, embeddings=None):
     else:
         vid_W = None 
     
-    if args.vid_enc_mode == 22:
+    if True: 
         vid_encoder = VidEncoder8(c(vid_W), c(a_W), vid_position,  venc_N, aenc_N, d_model, args)
         text_decoder = None
         
