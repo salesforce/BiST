@@ -91,7 +91,7 @@ Examples of pretrained BiST models using different parameter settings through `s
 |--------------------|--------|----------|---------|--------|-----|-------|-------|-------|-------|--------|---------|-------|
 | visual-audio-text  | 50     | [Download](https://drive.google.com/drive/folders/1xc1MbdHkDDX_G7qbn4m8DKEuopRDg5XF?usp=sharing) | ResNeXt | VGGish | Summary | 0.752 | 0.619 | 0.510 | 0.423 | 0.283  | 0.581   | 1.193 |
 | visual-text        | 30     | [Download](https://drive.google.com/drive/folders/1gkX-JK02TRsRkP7slz4eiq1Dp2UiKnqT?usp=sharing) | ResNeXt | No     | Summary | 0.755 | 0.623 | 0.517 | 0.432 | 0.284  | 0.585   | 1.194 |
-| visual-text        | 50     | [Download](https://drive.google.com/drive/folders/1xc1MbdHkDDX_G7qbn4m8DKEuopRDg5XF?usp=sharing) | ResNeXt | No     | Summary | 0.755 | 0.620 | 0.512 | 0.426 | 0.285  | 0.585   | 1.201 |
+| visual-text        | 50     | [Download](https://drive.google.com/drive/folders/1sE3t1tVciZ4H_2-902Z_5LylJCrMgcRO?usp=sharing) | ResNeXt | No     | Summary | 0.755 | 0.620 | 0.512 | 0.426 | 0.285  | 0.585   | 1.201 |
 
 
 ## Sample Generated Dialogue Responses
