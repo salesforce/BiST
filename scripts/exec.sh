@@ -6,7 +6,7 @@
 device=$1
 stage=$2       	# <=1: preparation <=2: training <=3: generating <=4: evaluating 
 test_mode=$3    # true: test run with small datasets OR false: run with real datasets 
-nb_workers=$6
+nb_workers=$4
 
 # data setting 
 decode_data=off                 	#use official data for testing 
