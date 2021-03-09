@@ -1,6 +1,7 @@
 ## BiST: Bi-directional Spatio-Temporal Reasoning for Video-Grounded Dialogues
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 
+
 This is the PyTorch implementation of the paper:
 **[BiST: Bi-directional Spatio-Temporal Reasoning for Video-Grounded Dialogues](<https://www.aclweb.org/anthology/2020.emnlp-main.145/>)**. [**Hung Le**](https://github.com/henryhungle), [Doyen Sahoo](https://scholar.google.com.sg/citations?user=A61jJD4AAAAJ&hl=en), [Nancy F. Chen](https://sites.google.com/site/nancyfchen/home), [Steven C.H. Hoi](https://sites.google.com/view/stevenhoi/). ***[EMNLP 2020](<https://www.aclweb.org/anthology/2020.emnlp-main.145/>)***. ([arXiv](https://arxiv.org/abs/2010.10095)) 
 
