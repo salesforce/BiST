@@ -102,4 +102,5 @@ Examples of pretrained BiST models using different parameter settings through `s
 Comparison of dialogue response outputs of BiST against the baseline models: Baseline (Hori et al., 2019) and MTN (Le et al., 2019b). Parts of the outputs that match and do not match the ground truth are highlighted in green and red respectively.
 </p>
 
-
+## TGIF-QA 
+BiST can be adapted to Video-QA tasks such as TGIF-QA. Please refer to [this](https://github.com/salesforce/BiST/tree/tgifqa) repo branch for TGIF-QA experiment details. 
