@@ -1,4 +1,4 @@
-irectional Spatio-Temporal Reasoning for Video-Grounded Dialogues 
+## BiST: Birectional Spatio-Temporal Reasoning for Video-Grounded Dialogues 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 
 **Note**: This branch is for the TGIF-QA experiments. For the video-grounded dialogue experiments on AVSD, please change the repo branch to [main](https://github.com/salesforce/BiST).
@@ -50,7 +50,7 @@ Our bidirectional approach models the dependencies between text and vision in tw
 
 We use the TGIF-QA benchmark. Refer to the official benchmark repo [here](https://github.com/YunseokJANG/tgif-qa) to download the dataset. Thanks to the authors of TGIF-QA benchmark, we developed the data-related code based on their shared codebase.
 
-To use the spatio-temporal features, we extracted the visual features from a [published](https://github.com/kenshohara/video-classification-3d-cnn-pytorch) pretrained ResNext-101 model. The extraction code is slightly changed to obtain the features right before average pooling along spatial regions. Due to the large size of the video datasets, we are unable to shared to extracted features. 
+To use the spatio-temporal features, we extracted the visual features from a [published](https://github.com/kenshohara/video-classification-3d-cnn-pytorch) pretrained ResNext-101/ResNet-152 model. The extraction code is slightly changed to obtain the features right before average pooling along spatial regions. Due to the large size of the video datasets, we are unable to shared to extracted features. 
 
 To extract the features, you can download TGIF videos following the instructions [here](https://github.com/YunseokJANG/tgif-qa/tree/master/dataset) to extract features by yourself. Please refer to  our modified code for feature extraction under the `video-classification-3d-cnn-pytorch` folder. An example running script is in the `run.sh` file in this folder. Videos are extracted by batches, specified by start and end index of video files.  
 
