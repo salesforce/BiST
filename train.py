@@ -158,19 +158,20 @@ for epoch in range(args.num_epochs):
     logging.info("epoch: {} train acc: {} loss: {} aeTemporalLoss {} aeSpatialLoss {}".format(
         epoch+1, train_acc, train_losses['out'], train_losses['temporal_ae'], train_losses['spatial_ae']))
     
-    # test on validation data 
-    logging.info('-------validation--------')
-    model.eval()
-    valid_losses, valid_acc = run_epoch(valid_dataloader, epoch, model, val_loss, eval=True)
-    logging.info("epoch: {} valid acc: {} loss: {} aeTemporalLoss {} aeSpatialLoss {}".format(
-        epoch+1, valid_acc, valid_losses['out'], valid_losses['temporal_ae'], valid_losses['spatial_ae']))  
+    with torch.no_grad(): 
+		# test on validation data 
+    	logging.info('-------validation--------')
+    	model.eval()
+    	valid_losses, valid_acc = run_epoch(valid_dataloader, epoch, model, val_loss, eval=True)
+    	logging.info("epoch: {} valid acc: {} loss: {} aeTemporalLoss {} aeSpatialLoss {}".format(
+        	epoch+1, valid_acc, valid_losses['out'], valid_losses['temporal_ae'], valid_losses['spatial_ae']))  
     
-    # test on test data 
-    logging.info('-------test--------')
-    model.eval()
-    test_losses, test_acc = run_epoch(test_dataloader, epoch, model, test_loss, eval=True)
-    logging.info("epoch: {} test acc: {} loss: {} aeTemporalLoss {} aeSpatialLoss {}".format(
-        epoch+1, test_acc, test_losses['out'], test_losses['temporal_ae'], test_losses['spatial_ae']))  
+    	# test on test data 
+    	logging.info('-------test--------')
+    	model.eval()
+    	test_losses, test_acc = run_epoch(test_dataloader, epoch, model, test_loss, eval=True)
+    	logging.info("epoch: {} test acc: {} loss: {} aeTemporalLoss {} aeSpatialLoss {}".format(
+        	epoch+1, test_acc, test_losses['out'], test_losses['temporal_ae'], test_losses['spatial_ae']))  
     
     with open(trace_log_path,"a") as f:
         f.write("{},train,{:e},{:e},{:e},{:e}\n".format(

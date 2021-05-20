@@ -105,7 +105,9 @@ logging.info('----------------')
 
 test_loss = SimpleLossCompute(model.generator, model.ae_generator, criterion, ae_criterion,
                              opt=None, args=args)
-model.eval()
-run_epoch(test_dataloader, model, test_loss)
+
+with torch.no_grad():
+	model.eval()
+	run_epoch(test_dataloader, model, test_loss)
 
 
