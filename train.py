@@ -159,7 +159,7 @@ for epoch in range(args.num_epochs):
         epoch+1, train_acc, train_losses['out'], train_losses['temporal_ae'], train_losses['spatial_ae']))
     
     with torch.no_grad(): 
-		# test on validation data 
+	# test on validation data 
     	logging.info('-------validation--------')
     	model.eval()
     	valid_losses, valid_acc = run_epoch(valid_dataloader, epoch, model, val_loss, eval=True)

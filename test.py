@@ -107,7 +107,7 @@ test_loss = SimpleLossCompute(model.generator, model.ae_generator, criterion, ae
                              opt=None, args=args)
 
 with torch.no_grad():
-	model.eval()
-	run_epoch(test_dataloader, model, test_loss)
+    model.eval()
+    run_epoch(test_dataloader, model, test_loss)
 
 
