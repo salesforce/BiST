@@ -81,8 +81,8 @@ class SimpleLossCompute:
                         -1, out.size(-1)), batch.query.contiguous().view(-1)) / ae_norm.float()
                     loss += spatiotemporal_ae_loss
             
-        loss.backward()
         if self.opt is not None:
+            loss.backward()
             self.opt.step()
             self.opt.optimizer.zero_grad()
             

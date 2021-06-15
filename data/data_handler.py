@@ -62,7 +62,9 @@ def load(fea_types, fea_path, dataset_file, vocab, include_caption='none', separ
     dialog_list = []
     vid_set = set()
     qa_id = 0
-    for dialog in dialog_data['dialogs']:
+    for dial_idx, dialog in enumerate(dialog_data['dialogs']):
+        #if dial_idx == 10: 
+        #    break 
         if include_caption == 'caption' or include_caption == 'summary':
             caption = words2ids(dialog[include_caption], vocab)
         elif include_caption == 'caption,summary':

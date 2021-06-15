@@ -143,7 +143,8 @@ for epoch in range(args.num_epochs):
     # test on validation data 
     logging.info('-------validation--------')
     model.eval()
-    valid_losses = run_epoch(valid_data, valid_dataloader, vocab, epoch, model, val_loss,
+    with torch.no_grad():
+        valid_losses = run_epoch(valid_data, valid_dataloader, vocab, epoch, model, val_loss,
                 eval=True, gen_valid_indices=gen_valid_indices)
     logging.info("epoch: {} valid loss: {} aeTemporalLoss {} aeSpatialLoss {}".format(
         epoch+1, valid_losses['out'], valid_losses['temporal_ae'], valid_losses['spatial_ae']))              
